@@ -39,4 +39,27 @@ function Unit:hasPlayed()
     return self.hasMoved and self.hasPlayed
 end
 
+function Unit:resetTurn()
+    self.hasMoved = false
+    self.hasAttacked = false
+end
+
+function Unit:hasUnitInRange(unit)
+    return (math.abs(unit.x - self.x) + math.abs(unit.y - self.y)) <= self.range
+end
+
+function Unit:attackEnemy(other)
+    self.hasAttacked = true
+    local damage = math.max(self.attack - other.defence, 1)
+    other.hp = other.hp - damage
+end
+
+function Unit:canAttack()
+    return not(self.hasAttacked)
+end
+
+function Unit:canMove()
+    return not(self.hasMoved)
+end
+
 return Unit
