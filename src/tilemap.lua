@@ -3,21 +3,23 @@ require("src/constant")
 local Tilemap = {}
 Tilemap.__index = Tilemap
 
-function Tilemap.new(tileset, grid)
+function Tilemap.new(tileset, grid, width, height)
     local tilemap = {
         grid = grid,
-        tileset = tileset
+        tileset = tileset,
+        width = width,
+        height = height
     }
-    tilemap.width = #grid[1]
-    tilemap.height = #grid
     setmetatable(tilemap, Tilemap)
     return tilemap
 end
 
 function Tilemap:draw()
+    local counter = 1
     for y = 1, self.height do
         for x = 1, self.width do
-            self.tileset:draw(self.grid[y][x], (x - 1) * CELL_SIZE, (y - 1) * CELL_SIZE)
+            self.tileset:draw(self.grid[counter] - 1, (x - 1) * CELL_SIZE, (y - 1) * CELL_SIZE)
+            counter = counter + 1
         end 
     end 
 end
@@ -30,9 +32,13 @@ function Tilemap:getCell(mouseX, mouseY)
         cellY > 0  and
         cellX <= self.width and 
         cellX > 0 then
-            return self.grid[cellY][cellX], cellX - 1, cellY - 1;
+            return self.grid[cellY * self.width + cellX], cellX - 1, cellY - 1;
     end
     return nil;
+end
+
+function Tilemap:getCellAtCoord(cellX, cellY)
+    return self.grid[cellY * self.width + cellX], cellX - 1, cellY - 1;
 end
 
 return Tilemap

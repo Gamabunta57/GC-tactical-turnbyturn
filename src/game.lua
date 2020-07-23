@@ -36,8 +36,8 @@ function Game.new()
     return game
 end
 
-function Game:setMap(tileset, map)
-    self.tilemap = Tilemap.new(tileset, map)
+function Game:setMap(tileset, map, width, height)
+    self.tilemap = Tilemap.new(tileset, map, width, height)
 end
 
 function Game:finishTurn()
@@ -56,13 +56,20 @@ function Game:finishTurn()
     self.state:newTurn()
 end
 
-function Game:setUnit(units)
-    for i = 1, #units do
-        local unit = units[i];
-        local player, type, cell_x, cell_y = unpack(unit)
-        local playerUnits = Unit.create(player, type, cell_x, cell_y)
-        table.insert(self.units, playerUnits);
-        table.insert(self.playerUnits[player], playerUnits);
+function Game:setUnit(units, width, height)
+    local counter = 0
+    for y = 1, height do
+        for x = 1, width do
+            counter = counter + 1
+            local unitInfo = units[counter] - 1
+            local key = "_"..unitInfo
+            if DB.unitTileId[key] ~= nil then 
+                local unitData = DB.unitTileId[key]
+                local playerUnits = Unit.create(unitData.player, unitData.type, x, y)
+                table.insert(self.units, playerUnits);
+                table.insert(self.playerUnits[unitData.player], playerUnits);
+            end
+        end
     end
 end
 
@@ -133,44 +140,48 @@ end
 
 function Game:getMovableCells(unit)
     local mv = unit.move
-    local cellX = unit.x
-    local cellY = unit.y
-
     local stack = {{mv = 0, x = unit.x, y = unit.y}}
-    local index = 1
     local cellAvailable = {}
 
     while #stack > 0 do
         local elem = stack[1]
         table.remove(stack, 1)
         local cost = elem.mv 
-        local isBlockingTile = table.contains(DB.blockingTile, self.tilemap.grid[elem.y + 1][elem.x + 1])
-        if(cost <= mv and not(isBlockingTile)) then
-            table.insert(cellAvailable, {x = elem.x, y = elem.y})
+        local isBlockingTile = table.contains(DB.blockingTile, self.tilemap:getCellAtCoord(elem.x, elem.y))
+        local unitOnCell = self:getUnit(elem.x , elem.y)
+        local hasUnit = unitOnCell ~= nil and unitOnCell ~= unit
+        if cost <= mv and not(isBlockingTile) and not(hasUnit) then
+            if  (elem.x ~= unit.x or
+                elem.y ~= unit.y) and 
+                not(positionInTable(cellAvailable, {x = elem.x, y = elem.y})) 
+                then
+                    table.insert(cellAvailable, {x = elem.x, y = elem.y})
+                end
+                
             local newPos = {x = elem.x, y = elem.y - 1}
             if  elem.y - 1 >= 0 and 
-                not(positionInTable(cellAvailable, newPos)) then
+                not(positionInTable(stack, newPos)) then
 
                 table.insert(stack, {mv = cost + 1, x = newPos.x, y = newPos.y})
             end
 
             newPos = {x = elem.x, y = elem.y + 1}
             if  elem.y + 1 < self.tilemap.height and
-                not(positionInTable(cellAvailable, newPos)) then
+                not(positionInTable(stack, newPos)) then
 
                 table.insert(stack, {mv = cost + 1, x = newPos.x, y = newPos.y})
             end
             
             newPos = {x = elem.x + 1, y = elem.y}
             if  elem.x + 1 < self.tilemap.width and
-                not(positionInTable(cellAvailable, newPos)) then
+                not(positionInTable(stack, newPos)) then
 
                 table.insert(stack, {mv = cost + 1, x = newPos.x, y = newPos.y})
             end
 
             newPos = {x = elem.x - 1, y = elem.y}
             if  elem.x - 1 >= 0 and 
-                not(positionInTable(cellAvailable, newPos)) then
+                not(positionInTable(stack, newPos)) then
 
                 table.insert(stack, {mv = cost + 1, x = newPos.x, y = newPos.y})
             end

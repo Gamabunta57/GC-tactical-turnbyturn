@@ -13,6 +13,25 @@ DB = {
     },
 
     blockingTile = {
-        4, 5, 10, 11, 16, 17, 22, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 34, 35
-    }
+        5, 6, 11, 12, 17, 18, 23, 24, 27, 29, 30, 33, 34, 35, 36
+    },
+}
+
+DB.unitTileId = {
+    _34 = {
+        type = DB.unit.melee,
+        player = P2
+    }, 
+    _35 = {
+        type = DB.unit.archer,
+        player = P2
+    }, 
+    _28 = {
+        type = DB.unit.melee,
+        player = P1
+    }, 
+    _29 = {
+        type = DB.unit.archer,
+        player = P1
+    }, 
 }

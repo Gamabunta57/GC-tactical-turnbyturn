@@ -1,6 +1,7 @@
 require("src/constant")
 require("lib/table_extension")
 require("src/db")
+local Map = require("src/map")
 local Game = require("src/game")
 local Unit = require("src/unit")
 local Tileset = require("src/tileset")
@@ -11,24 +12,6 @@ if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
     io.stdout:setvbuf('no')
 end
 
-local map = {
-    {0, 1, 2, 3, 4},
-    {6, 7, 8, 9, 10},
-    {12, 13, 14, 15, 16},
-    {18, 19, 20, 21, 22},
-    {0, 0, 0, 0, 0},
-}
-
-local unitPosition = {
-    {P1, DB.unit.melee, 0,0},
-    {P1, DB.unit.melee, 1,2},
-    {P1, DB.unit.melee, 3,2},
-
-    {P2, DB.unit.melee, 0,1},
-    {P2, DB.unit.melee, 1,3},
-    {P2, DB.unit.melee, 3,3}
-}
-
 local game = Game.new()
 
 local window = {
@@ -36,12 +19,17 @@ local window = {
     height = 0
 }
 
+local map = nil
+local level = 1
+
 function love.load()
     window.x, window.y = love.graphics.getWidth(), love.graphics.getHeight()
 
+    map = Map.load("assets/map/lvl_"..level)
+
     local tileset = Tileset.new(love.graphics.newImage("assets/images/tileset.png"))
-    game:setMap(tileset, map)
-    game:setUnit(unitPosition)
+    game:setMap(tileset, map:getTerrain(), map:getWidth(), map:getHeight())
+    game:setUnit(map:getUnits(), map:getWidth(), map:getHeight())
 end
 
 function love.update(dt)
