@@ -98,11 +98,9 @@ function PlayerState:mousePressed(x, y, button)
 
     elseif button == 2 then  
         local unit = self.game:getUnit(x, y)
-        if  self.game.selectedUnit ~= nil and 
-            self.game.selectedUnit.player ~= self.game.turn 
-            then
-                self.game.selectedUnit = nil
-                self.movableCells = {}
+        if  unit == nil then
+            self.game.selectedUnit = nil
+            self.movableCells = {}
         elseif self.game.selectedUnit ~= nil and 
             unit ~= nil and 
             unit.player ~= self.game.turn and
