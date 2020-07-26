@@ -23,7 +23,7 @@ function Tileset.new(image)
 end
 
 function Tileset:draw(index, x, y)
-    love.graphics.draw(self.image, self.quads[index + 1], x, y, 0, 1, 1, 1, 1)
+    love.graphics.draw(self.image, self.quads[index], x, y, 0, 1, 1, 1, 1)
 end
 
 return Tileset

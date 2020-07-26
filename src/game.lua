@@ -21,14 +21,14 @@ function Game.new()
         hoveringUnit = nil,
         movableCells = {},
         turn = P1,
-        playerUnits = {
-            P1 = {},
-            P2 = {}
-        },
+        playerUnits = {},
         ai = nil,
         playerState = nil,
-        state = nil
+        state = nil,
+        winner = nil
     }
+    game.playerUnits[P1] = {}
+    game.playerUnits[P2] = {}
     game.ai = Ai.new(game)
     game.playerState = PlayerState.new(game)
     game.state = game.playerState
@@ -78,7 +78,7 @@ function Game:update(dt)
 
     for i = #self.units, 1, -1 do 
         local unit = self.units[i]
-        if(unit.hp < 0) then
+        if(unit.hp <= 0) then
             self:removeUnit(unit)
         end
     end
@@ -91,8 +91,16 @@ function Game:draw()
     for i=1, #self.units do
         self.units[i]:draw()
     end
-
+    
+    love.graphics.setColor({1,1,1,1})
+    love.graphics.print(self.turn.."'s turn", self.tilemap.width * CELL_SIZE + 20, 5)
     self.state:draw()
+
+    if self.winner ~= nil then
+        local string = self.winner.. " wins the game"
+        local textWidth = love.graphics:getFont():getWidth(string)
+        love.graphics.print(string, (self.tilemap.width * CELL_SIZE - textWidth) / 2, self.tilemap.height * CELL_SIZE + 20)
+    end
 end
 
 function Game:mouseMoved(x, y)
@@ -124,7 +132,7 @@ function Game:removeUnit(unitToRemove)
     end
 
     if #self.playerUnits[unitToRemove.player] == 0 then
-        print(self.turn.. " wins the match")
+        self.winner = self.turn
     end
 end
 

@@ -1,3 +1,6 @@
 CELL_SIZE = 16
-P1 = "P1"
-P2 = "P2"
+P1 = "Player"
+P2 = "Computer"
+GRASS = "grass"
+WATER = "water"
+UNIT = "unit"

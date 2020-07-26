@@ -14,27 +14,22 @@ function PlayerState:update()
 end
 
 function PlayerState:draw()
-
+    local infoX = self.game.tilemap.width * CELL_SIZE + 20
+    
     if nil ~= self.game.hoveringCell.info then
-        love.graphics.print(self.game.hoveringCell.info, CELL_SIZE * 6, 10)
-        love.graphics.setColor({0.8,0.5,0.8,0.5})
+        love.graphics.print("hovering terrain: "..DB.tileType[self.game.hoveringCell.info], infoX, 35)
+        love.graphics.setColor({0.8,0.5,0.8,0.3})
         love.graphics.rectangle("fill", self.game.hoveringCell.x * CELL_SIZE, self.game.hoveringCell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
         love.graphics.setColor({1,1,1,1})
+    end
 
-        local unit = self.game:getUnit(self.game.hoveringCell.x, self.game.hoveringCell.y)
-        if nil ~= unit then 
-            love.graphics.print("Unit type:" ..unit.type,  CELL_SIZE * 6, 25)
-        end
+    if nil ~= self.game.hoveringUnit and self.game.hoveringUnit ~= self.game.selectedUnit then
+        self:displayUnitInfo("hovering unit:", self.game.hoveringUnit, infoX + 120, 60)
     end
 
     if nil ~= self.game.selectedUnit then
-        love.graphics.print(self.game.selectedUnit.type, CELL_SIZE * 6, 40)
-        love.graphics.setColor({0.9,0.2,0.9,0.5})
+        self:displayUnitInfo("selected unit:", self.game.selectedUnit, infoX, 60)
         love.graphics.rectangle("fill", self.game.selectedUnit.x * CELL_SIZE, self.game.selectedUnit.y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-    end
-
-    if nil ~= self.game.hoveringUnit then
-        love.graphics.print(self.game.hoveringUnit.type, CELL_SIZE * 6, 55)
     end
 
     if self.game.selectedUnit ~= nil then 
@@ -48,6 +43,22 @@ function PlayerState:draw()
             love.graphics.rectangle("fill", cell.x * CELL_SIZE, cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE )
         end
     end
+
+    love.graphics.setColor({1,1,1,1})
+    love.graphics.print("Commands:", infoX, 250)
+    love.graphics.print("  left click: \n    - select unit \n    - or move selected unit", infoX, 250 + 15 * 1)
+    love.graphics.print("  right click: \n    - unselect unit \n    - or attack enemy in range", infoX, 250 + 15 * 5)
+    love.graphics.print("  return key: \n    - finish turn", infoX, 250 + 15 * 9)
+end
+
+function PlayerState:displayUnitInfo(title, unit, startX, startY)
+    love.graphics.print(title, startX, startY)
+    love.graphics.print("  Player: "..unit.player, startX, startY + 1 * 15)
+    love.graphics.print("  HP: "..unit.hp, startX, startY + 2 * 15)
+    love.graphics.print("  Can move: "..tostring(not(unit.hasMoved)), startX, startY + 3 * 15)
+    love.graphics.print("  Can attack: "..tostring(not(unit.hasAttacked)), startX, startY + 4 * 15)
+    love.graphics.print("  Move Range: "..unit.move, startX, startY + 5 * 15)
+    love.graphics.print("  Attack Range: "..unit.range, startX, startY + 6 * 15)
 end
 
 function PlayerState:mouseMoved(x, y)

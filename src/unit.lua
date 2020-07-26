@@ -31,7 +31,11 @@ function Unit.create(player, type, x, y)
 end
 
 function Unit:draw()
-    love.graphics.setColor({0.5, 0.5, 0.8, 1})
+    if self.player == P1 then
+        love.graphics.setColor({0.5, 0.5, 0.8, 1})
+    else
+        love.graphics.setColor({0.8, 0.5, 0.5, 1})
+    end
     love.graphics.rectangle("fill", self.x * CELL_SIZE + 2, self.y * CELL_SIZE + 2, CELL_SIZE - 4, CELL_SIZE - 4)
 end
 

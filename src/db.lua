@@ -15,6 +15,7 @@ DB = {
     blockingTile = {
         5, 6, 11, 12, 17, 18, 23, 24, 27, 29, 30, 33, 34, 35, 36
     },
+    tileType = {}
 }
 
 DB.unitTileId = {
@@ -35,3 +36,45 @@ DB.unitTileId = {
         player = P1
     }, 
 }
+
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = WATER
+
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = WATER
+
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = WATER
+
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = WATER
+
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = UNIT
+DB.tileType[#DB.tileType + 1] = UNIT
+
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = GRASS
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = WATER
+DB.tileType[#DB.tileType + 1] = UNIT
+DB.tileType[#DB.tileType + 1] = UNIT
